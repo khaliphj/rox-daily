@@ -63,7 +63,7 @@ struct TodayView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("\(max(store.daysToRace, 0))")
                         .font(.system(size: 54, weight: .heavy, design: .rounded))
-                    Text(store.daysToRace == 0 ? "Race day" : "days to HYROX \(store.profile?.city ?? "")")
+                    Text(store.daysToRace <= 0 ? "Race day" : "days to HYROX \(store.profile?.city ?? "")")
                         .font(.subheadline.weight(.medium)).opacity(0.9)
                 }
                 Spacer()

@@ -5,7 +5,7 @@ struct NewsView: View {
     @Environment(\.openURL) private var openURL
     @State private var topic: NewsTopic = .local
     @State private var cache: [NewsTopic: [NewsItem]] = [:]
-    @State private var loading = false
+    @State private var loadingTopic: NewsTopic?
     @State private var failed = false
 
     private var city: String {
@@ -47,7 +47,7 @@ struct NewsView: View {
                                         .multilineTextAlignment(.leading)
                                     HStack(spacing: 6) {
                                         if !item.source.isEmpty { Text(item.source).foregroundStyle(Theme.accent) }
-                                        if let d = item.date { Text(d.formatted(.relative(presentation: .named))) }
+                                        if let d = item.date { Text(d.formatted(.relative(presentation: .named, unitsStyle: .wide))) }
                                         Spacer(minLength: 0)
                                         Image(systemName: "arrow.up.right")
                                     }
@@ -58,7 +58,7 @@ struct NewsView: View {
                         }
                     } else {
                         Card {
-                            if loading {
+                            if loadingTopic == topic {
                                 HStack(spacing: 10) { ProgressView(); Text("Loading stories").foregroundStyle(Theme.muted) }
                             } else if failed {
                                 Text("Could not load stories").font(.subheadline.weight(.semibold))
@@ -96,7 +96,7 @@ struct NewsView: View {
     private func load(force: Bool) async {
         let current = topic
         if !force, cache[current] != nil { return }
-        loading = true
+        loadingTopic = current
         failed = false
         do {
             // Detached from the view's task so a list refresh cannot cancel the request.
@@ -106,6 +106,6 @@ struct NewsView: View {
         } catch {
             if cache[current] == nil { failed = true }
         }
-        loading = false
+        if loadingTopic == current { loadingTopic = nil }
     }
 }

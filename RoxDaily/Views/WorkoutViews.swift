@@ -242,11 +242,11 @@ struct BonusDetailView: View {
                         ForEach(workout.rows) { row in
                             if row.id > 0 { Divider().overlay(Theme.line) }
                             HStack(spacing: 8) {
-                                (Text(row.run).font(.system(.title3, design: .rounded).weight(.heavy)).foregroundColor(Theme.accent)
-                                    + Text("  RUN").font(.subheadline.weight(.bold)).foregroundColor(Theme.ink))
+                                BigAmount(amount: row.run, label: "RUN", labelWeight: .bold)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.7)
                                     .frame(width: 118, alignment: .leading)
-                                (Text(row.amount).font(.system(.title3, design: .rounded).weight(.heavy)).foregroundColor(Theme.accent)
-                                    + Text("  " + row.move.uppercased()).font(.subheadline.weight(.bold)).foregroundColor(Theme.ink))
+                                BigAmount(amount: row.amount, label: row.move.uppercased(), labelWeight: .bold)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.7)

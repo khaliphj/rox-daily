@@ -172,12 +172,26 @@ struct QuantityText: View {
         let parts = Fmt.quantity(item)
         Group {
             if let qty = parts.qty {
-                Text(qty).font(.system(.title3, design: .rounded).weight(.heavy)).foregroundColor(dimmed ? Theme.muted : Theme.accent)
-                    + Text("  " + parts.rest).font(.subheadline.weight(.semibold)).foregroundColor(dimmed ? Theme.muted : Theme.ink)
+                BigAmount(amount: qty, label: parts.rest, amountColor: dimmed ? Theme.muted : Theme.accent, labelColor: dimmed ? Theme.muted : Theme.ink)
             } else {
                 Text(parts.rest).font(.subheadline.weight(.medium)).foregroundColor(dimmed ? Theme.muted : Theme.ink)
             }
         }
         .multilineTextAlignment(.leading)
+    }
+}
+
+/// A heavy rounded amount followed by its label, as one wrapping line of text.
+struct BigAmount: View {
+    let amount: String
+    let label: String
+    var amountColor: Color = Theme.accent
+    var labelColor: Color = Theme.ink
+    var labelWeight: Font.Weight = .semibold
+
+    var body: some View {
+        let big: Text = Text(amount).font(.system(.title3, design: .rounded).weight(.heavy)).foregroundColor(amountColor)
+        let small: Text = Text("  " + label).font(.subheadline.weight(labelWeight)).foregroundColor(labelColor)
+        return big + small
     }
 }

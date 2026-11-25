@@ -14,15 +14,16 @@ if [ -z "$TEAM" ]; then
   exit 0
 fi
 
+rm -rf build/Build/Products/Debug-iphoneos
 echo "Building with team $TEAM..."
 xcodebuild -project RoxDaily.xcodeproj -scheme RoxDaily -configuration Debug \
   -destination 'generic/platform=iOS' -derivedDataPath build \
   -allowProvisioningUpdates DEVELOPMENT_TEAM="$TEAM" build | grep -E "error|BUILD" || true
 
-APP=$(find build/Build/Products/Debug-iphoneos -name RoxDaily.app -maxdepth 1 | head -1)
+APP=$(find build/Build/Products/Debug-iphoneos -maxdepth 1 -name RoxDaily.app 2>/dev/null | head -1 || true)
 [ -n "$APP" ] || { echo "Build failed. Open RoxDaily.xcodeproj in Xcode to see why."; exit 1; }
 
-DEVICE=$(xcrun devicectl list devices 2>/dev/null | awk '/iPhone/ && /connected|available/ {for (i=1;i<=NF;i++) if ($i ~ /^[0-9A-F-]{36}$/) {print $i; exit}}')
+DEVICE=$(xcrun devicectl list devices 2>/dev/null | awk '/iPhone/ && !/unavailable/ && /connected|available/ {for (i=1;i<=NF;i++) if ($i ~ /^[0-9A-F-]{36}$/) {print $i; exit}}')
 [ -n "$DEVICE" ] || { echo "No iPhone found. Plug it in, unlock it, tap Trust, then run this again."; exit 1; }
 
 xcrun devicectl device install app --device "$DEVICE" "$APP"

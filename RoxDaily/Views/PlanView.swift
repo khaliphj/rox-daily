@@ -22,7 +22,7 @@ struct PlanView: View {
                         SegmentedPills(options: ["Plan", "For Time"], selection: $tab) { $0 }
 
                         if tab == "Plan" {
-                            LazyVStack(alignment: .leading, spacing: 16) {
+                            VStack(alignment: .leading, spacing: 16) {
                                 ForEach(store.weeks) { week in weekCard(week).id("w\(week.number)") }
                             }
                         } else {
