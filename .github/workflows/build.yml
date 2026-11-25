@@ -1,0 +1,40 @@
+name: Build
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build for simulator
+        run: |
+          set -o pipefail
+          xcodebuild -project RoxDaily.xcodeproj -scheme RoxDaily -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tee build.log | grep -E "error|warning: unre|BUILD|\*\*" || true
+          grep -q "BUILD SUCCEEDED" build.log
+      - name: Screenshots
+        run: |
+          set -x
+          APP=$(find build/Build/Products -name RoxDaily.app | head -1)
+          DEV=$(xcrun simctl list devices available | grep -E "iPhone 1[5-7]( Pro)? \(" | head -1 | grep -oE "[0-9A-F-]{36}")
+          xcrun simctl boot "$DEV"; xcrun simctl bootstatus "$DEV" -b
+          xcrun simctl install "$DEV" "$APP"
+          mkdir shots
+          xcrun simctl launch "$DEV" com.roxdaily.trainer.k7q2; sleep 8
+          xcrun simctl io "$DEV" screenshot shots/0-splash.png
+          xcrun simctl terminate "$DEV" com.roxdaily.trainer.k7q2
+          for t in 0 1 2 3 4; do
+            xcrun simctl launch "$DEV" com.roxdaily.trainer.k7q2 -demo -tab $t; sleep 9
+            xcrun simctl io "$DEV" screenshot shots/tab-$t.png
+            xcrun simctl terminate "$DEV" com.roxdaily.trainer.k7q2
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-output
+          path: |
+            build.log
+            shots
