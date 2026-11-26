@@ -10,19 +10,24 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
-      - name: Build for simulator
+      - name: Pick a simulator
+        run: |
+          DEV=$(xcrun simctl list devices available | grep -E "iPhone 1[5-7]( Pro)? \(" | head -1 | grep -oE "[0-9A-F-]{36}")
+          echo "DEV=$DEV" >> "$GITHUB_ENV"
+          xcrun simctl boot "$DEV"; xcrun simctl bootstatus "$DEV" -b
+      - name: Build and run UI tests
         run: |
           set -o pipefail
-          xcodebuild -project RoxDaily.xcodeproj -scheme RoxDaily -configuration Debug \
-            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
-            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tee build.log | grep -E "error|warning: unre|BUILD|\*\*" || true
-          grep -q "BUILD SUCCEEDED" build.log
+          xcodebuild test -project RoxDaily.xcodeproj -scheme RoxDaily -configuration Debug \
+            -destination "platform=iOS Simulator,id=$DEV" \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO 2>&1 | tee build.log | grep -E "error|failed|passed|Test Case|BUILD|TEST|\*\*" || true
+          grep -q "TEST SUCCEEDED" build.log
       - name: Screenshots
+        if: always()
         run: |
           set -x
           APP=$(find build/Build/Products -name RoxDaily.app | head -1)
-          DEV=$(xcrun simctl list devices available | grep -E "iPhone 1[5-7]( Pro)? \(" | head -1 | grep -oE "[0-9A-F-]{36}")
-          xcrun simctl boot "$DEV"; xcrun simctl bootstatus "$DEV" -b
+          xcrun simctl uninstall "$DEV" com.roxdaily.trainer.k7q2 || true
           xcrun simctl install "$DEV" "$APP"
           mkdir shots
           xcrun simctl launch "$DEV" com.roxdaily.trainer.k7q2; sleep 8
@@ -34,9 +39,9 @@ jobs:
             xcrun simctl terminate "$DEV" com.roxdaily.trainer.k7q2
           done
       - name: Publish screenshots to the screenshots branch
-        if: github.ref == 'refs/heads/main'
+        if: always() && github.ref == 'refs/heads/main'
         run: |
-          cp build.log shots/ || true
+          mkdir -p shots; cp build.log shots/ || true
           cd shots
           git init -q -b screenshots
           git add -A

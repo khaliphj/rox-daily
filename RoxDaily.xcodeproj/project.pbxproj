@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		A10000000000000000000001 /* RoxDaily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoxDaily.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000011 /* RoxDailyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoxDailyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +17,22 @@
 			path = RoxDaily;
 			sourceTree = "<group>";
 		};
+		A10000000000000000000012 /* RoxDailyUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = RoxDailyUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A10000000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000000000000000000013 = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +46,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000002 /* RoxDaily */,
+				A10000000000000000000012 /* RoxDailyUITests */,
 				A10000000000000000000005 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000000000000000000001 /* RoxDaily.app */,
+				A10000000000000000000011 /* RoxDailyUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,7 +85,48 @@
 			productReference = A10000000000000000000001 /* RoxDaily.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A10000000000000000000016 /* RoxDailyUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1000000000000000000001B;
+			buildPhases = (
+				A10000000000000000000014,
+				A10000000000000000000013,
+				A10000000000000000000015,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A10000000000000000000017,
+			);
+			fileSystemSynchronizedGroups = (
+				A10000000000000000000012 /* RoxDailyUITests */,
+			);
+			name = RoxDailyUITests;
+			packageProductDependencies = (
+			);
+			productName = RoxDailyUITests;
+			productReference = A10000000000000000000011 /* RoxDailyUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
+
+/* Begin PBXContainerItemProxy section */
+		A10000000000000000000018 = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A10000000000000000000009 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10000000000000000000006;
+			remoteInfo = RoxDaily;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		A10000000000000000000017 = {
+			isa = PBXTargetDependency;
+			target = A10000000000000000000006 /* RoxDaily */;
+			targetProxy = A10000000000000000000018;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXProject section */
 		A10000000000000000000009 /* Project object */ = {
@@ -82,6 +138,10 @@
 				TargetAttributes = {
 					A10000000000000000000006 = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					A10000000000000000000016 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = A10000000000000000000006;
 					};
 				};
 			};
@@ -100,6 +160,7 @@
 			projectRoot = "";
 			targets = (
 				A10000000000000000000006 /* RoxDaily */,
+				A10000000000000000000016 /* RoxDailyUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -112,10 +173,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A10000000000000000000015 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A10000000000000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000000000000000000014 = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -219,6 +294,40 @@
 			};
 			name = Release;
 		};
+		A10000000000000000000019 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.roxdaily.trainer.k7q2.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = RoxDaily;
+			};
+			name = Debug;
+		};
+		A1000000000000000000001A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.roxdaily.trainer.k7q2.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = RoxDaily;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -236,6 +345,15 @@
 			buildConfigurations = (
 				A1000000000000000000000F /* Debug */,
 				A10000000000000000000010 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1000000000000000000001B = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000019 /* Debug */,
+				A1000000000000000000001A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -16,6 +16,10 @@ final class Store: ObservableObject {
 
     init() {
         let d = UserDefaults.standard
+        // UI tests start from a clean install.
+        if ProcessInfo.processInfo.arguments.contains("-uitest-reset") {
+            for key in ["profile", "logs", "benchmarks", "reminderOn", "reminderHour"] { d.removeObject(forKey: key) }
+        }
         reminderOn = d.bool(forKey: "reminderOn")
         reminderHour = d.object(forKey: "reminderHour") as? Int ?? 7
         profile = load("profile")

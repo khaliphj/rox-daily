@@ -22,6 +22,7 @@ struct TodayView: View {
                         Spacer()
                         Button { showSettings = true } label: { CircleIcon(symbol: "gearshape") }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("Settings")
                     }
                     .padding(.top, 4)
 
