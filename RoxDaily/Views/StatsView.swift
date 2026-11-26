@@ -19,17 +19,6 @@ struct StatsView: View {
                     .listRowInsets(EdgeInsets())
                 }
 
-                Section("Weeks") {
-                    ForEach(store.weeks) { week in
-                        HStack {
-                            Text("W\(week.number)").font(.caption.monospacedDigit()).frame(width: 34, alignment: .leading)
-                            ProgressView(value: Double(store.done(in: week)), total: Double(max(week.sessions, 1)))
-                                .tint(store.done(in: week) >= week.sessions ? Color.green : Theme.accent)
-                            Text("\(store.done(in: week))/\(week.sessions)").font(.caption.monospacedDigit()).foregroundStyle(Theme.muted)
-                        }
-                    }
-                }
-
                 Section {
                     if store.benchmarks.isEmpty {
                         Text("Log a test now and repeat it every 4-6 weeks to see the plan working. Update your 5K time in Settings when it improves so your paces keep up.")
@@ -50,6 +39,17 @@ struct StatsView: View {
                     }
                 } header: {
                     Text("Benchmarks")
+                }
+
+                Section("Weeks") {
+                    ForEach(store.weeks) { week in
+                        HStack {
+                            Text("W\(week.number)").font(.caption.monospacedDigit()).frame(width: 34, alignment: .leading)
+                            ProgressView(value: Double(store.done(in: week)), total: Double(max(week.sessions, 1)))
+                                .tint(store.done(in: week) >= week.sessions ? Color.green : Theme.accent)
+                            Text("\(store.done(in: week))/\(week.sessions)").font(.caption.monospacedDigit()).foregroundStyle(Theme.muted)
+                        }
+                    }
                 }
             }
             .scrollContentBackground(.hidden)
