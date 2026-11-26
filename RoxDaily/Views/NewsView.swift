@@ -73,6 +73,7 @@ struct NewsView: View {
             }
             .background(Theme.bg)
             .toolbar(.hidden, for: .navigationBar)
+            .overlay(alignment: .top) { StatusBarStrip() }
             .refreshable { await load(force: true) }
             .task(id: topic) { await load(force: false) }
         }

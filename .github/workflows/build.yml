@@ -28,7 +28,7 @@ jobs:
           xcrun simctl launch "$DEV" com.roxdaily.trainer.k7q2; sleep 8
           xcrun simctl io "$DEV" screenshot shots/0-splash.png
           xcrun simctl terminate "$DEV" com.roxdaily.trainer.k7q2
-          for t in 0 1 2 3 4; do
+          for t in 0 1 2 3 4 5; do
             xcrun simctl launch "$DEV" com.roxdaily.trainer.k7q2 -demo -tab $t; sleep 9
             xcrun simctl io "$DEV" screenshot shots/tab-$t.png
             xcrun simctl terminate "$DEV" com.roxdaily.trainer.k7q2

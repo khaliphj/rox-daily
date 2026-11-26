@@ -50,6 +50,7 @@ struct TodayView: View {
             }
             .background(Theme.bg)
             .toolbar(.hidden, for: .navigationBar)
+            .overlay(alignment: .top) { StatusBarStrip() }
             .navigationDestination(for: String.self) { id in
                 if let w = store.workout(id: id) { WorkoutDetailView(workout: w) }
             }

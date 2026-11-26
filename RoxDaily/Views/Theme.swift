@@ -195,3 +195,10 @@ struct BigAmount: View {
         return big + small
     }
 }
+
+/// Solid strip behind the status bar for screens that hide the navigation bar.
+struct StatusBarStrip: View {
+    var body: some View {
+        Theme.bg.frame(height: 0).ignoresSafeArea(edges: .top)
+    }
+}

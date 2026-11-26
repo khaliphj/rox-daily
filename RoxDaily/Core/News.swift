@@ -124,7 +124,13 @@ enum NewsService {
                     .filter { $0.title.range(of: "hyrox", options: .caseInsensitive) != nil }
                     .filter { seen.insert($0.link).inserted }
                 if !items.isEmpty {
-                    return Array(items.sorted { ($0.date ?? .distantPast) > ($1.date ?? .distantPast) }.prefix(40))
+                    let newest = items.sorted { ($0.date ?? .distantPast) > ($1.date ?? .distantPast) }
+                    guard topic == .local else { return Array(newest.prefix(40)) }
+                    // Stories that name the city or state lead the local tab.
+                    let isLocal: (NewsItem) -> Bool = { item in
+                        [city, "Georgia"].contains { item.title.range(of: $0, options: .caseInsensitive) != nil }
+                    }
+                    return Array((newest.filter(isLocal) + newest.filter { !isLocal($0) }).prefix(40))
                 }
             } catch {
                 lastError = error

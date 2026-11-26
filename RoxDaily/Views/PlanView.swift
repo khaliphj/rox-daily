@@ -52,11 +52,12 @@ struct PlanView: View {
                 }
                 .background(Theme.bg)
                 .toolbar(.hidden, for: .navigationBar)
+                .overlay(alignment: .top) { StatusBarStrip() }
                 .navigationDestination(for: String.self) { id in
                     if let w = store.workout(id: id) { WorkoutDetailView(workout: w) }
                 }
                 .onAppear {
-                    if let n = store.currentWeek?.number { proxy.scrollTo("w\(n)", anchor: .top) }
+                    if let n = store.currentWeek?.number, n > 1 { proxy.scrollTo("w\(n)", anchor: .top) }
                 }
             }
         }

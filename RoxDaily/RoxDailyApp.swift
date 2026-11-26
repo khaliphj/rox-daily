@@ -25,6 +25,14 @@ struct RootView: View {
     @State private var tab = UserDefaults.standard.integer(forKey: "tab")
 
     var body: some View {
+        if tab == 5, let sample = BonusWorkout.all.first {
+            NavigationStack { BonusDetailView(workout: sample) }
+        } else {
+            tabs
+        }
+    }
+
+    private var tabs: some View {
         TabView(selection: $tab) {
             TodayView().tabItem { Label("Today", systemImage: "house.fill") }.tag(0)
             PlanView().tabItem { Label("Plan", systemImage: "calendar") }.tag(1)
