@@ -147,6 +147,7 @@ struct StopwatchCard: View {
                         Text(Fmt.clock(Int(elapsed(at: context.date))))
                             .font(.system(size: 32, weight: .bold, design: .rounded).monospacedDigit())
                             .foregroundStyle(Theme.ink)
+                            .accessibilityIdentifier("stopwatch")
                     }
                 }
                 Spacer()
@@ -157,6 +158,7 @@ struct StopwatchCard: View {
                     CircleIcon(symbol: "arrow.counterclockwise")
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Reset stopwatch")
                 Button {
                     if let s = startedAt {
                         banked += Date().timeIntervalSince(s)
@@ -172,6 +174,7 @@ struct StopwatchCard: View {
                         .background(Theme.accent, in: Circle())
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(startedAt == nil ? "Start stopwatch" : "Pause stopwatch")
             }
         }
     }

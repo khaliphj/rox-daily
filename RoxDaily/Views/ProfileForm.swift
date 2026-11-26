@@ -142,6 +142,8 @@ struct SettingsView: View {
                     }
                 } header: {
                     Text("Reminders")
+                } footer: {
+                    Text(store.reminderStatus)
                 }
                 Section {
                     Button("Restart plan from today", role: .destructive) {
@@ -164,6 +166,7 @@ struct SettingsView: View {
                 }
             }
             .onAppear { if let p = store.profile { draft = p } }
+            .task { await store.refreshReminderStatus() }
         }
     }
 }

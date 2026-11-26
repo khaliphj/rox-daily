@@ -11,6 +11,9 @@ final class Store: ObservableObject {
     @Published var reminderOn: Bool { didSet { defaults.set(reminderOn, forKey: "reminderOn"); scheduleReminder() } }
     @Published var reminderHour: Int { didSet { defaults.set(reminderHour, forKey: "reminderHour"); scheduleReminder() } }
 
+    /// What iOS actually has scheduled, shown in Settings.
+    @Published private(set) var reminderStatus = ""
+
     private let defaults = UserDefaults.standard
     private var index: [String: Workout] = [:]
 
@@ -152,16 +155,33 @@ final class Store: ObservableObject {
     func scheduleReminder() {
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: ["daily"])
-        guard reminderOn else { return }
+        guard reminderOn else { reminderStatus = ""; return }
         let hour = reminderHour
         Task {
-            guard (try? await center.requestAuthorization(options: [.alert, .sound])) == true else { return }
+            guard (try? await center.requestAuthorization(options: [.alert, .sound])) == true else {
+                reminderStatus = "Notifications are turned off for Rox Daily in the iPhone's Settings app."
+                return
+            }
             let content = UNMutableNotificationContent()
             content.title = "Today's session is ready"
             content.body = "Open Rox Daily to see your workout."
             content.sound = .default
             let trigger = UNCalendarNotificationTrigger(dateMatching: DateComponents(hour: hour, minute: 0), repeats: true)
             try? await center.add(UNNotificationRequest(identifier: "daily", content: content, trigger: trigger))
+            await refreshReminderStatus()
+        }
+    }
+
+    /// Reads the pending request back from iOS rather than assuming it was stored.
+    func refreshReminderStatus() async {
+        guard reminderOn else { reminderStatus = ""; return }
+        let pending = await UNUserNotificationCenter.current().pendingNotificationRequests()
+        let hours = pending.filter { $0.identifier == "daily" }
+            .compactMap { ($0.trigger as? UNCalendarNotificationTrigger)?.dateComponents.hour }
+        if let hour = hours.first {
+            reminderStatus = "Scheduled daily at \(hour):00"
+        } else {
+            reminderStatus = "No reminder is scheduled yet."
         }
     }
 }

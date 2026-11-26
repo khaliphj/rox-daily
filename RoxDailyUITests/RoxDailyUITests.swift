@@ -38,6 +38,21 @@ final class RoxDailyUITests: XCTestCase {
         app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH 'Strength: '")).firstMatch.tap()
         XCTAssertTrue(app.staticTexts["Why this session"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["Warm-up"].exists)
+        // Stopwatch: runs, pauses and resets
+        let start = app.buttons["Start stopwatch"]
+        reveal(start)
+        let clock = app.staticTexts["stopwatch"]
+        XCTAssertEqual(clock.label, "0:00")
+        start.tap()
+        sleep(3)
+        app.buttons["Pause stopwatch"].tap()
+        let paused = clock.label
+        XCTAssertNotEqual(paused, "0:00", "Stopwatch should have advanced")
+        sleep(2)
+        XCTAssertEqual(clock.label, paused, "Stopwatch should hold while paused")
+        app.buttons["Reset stopwatch"].tap()
+        XCTAssertEqual(clock.label, "0:00")
+
         let complete = app.buttons["Mark complete"]
         reveal(complete)
         complete.tap()
@@ -87,6 +102,18 @@ final class RoxDailyUITests: XCTestCase {
         reveal(fewer)
         fewer.tap()
         XCTAssertTrue(app.staticTexts["Training days per week: 4"].waitForExistence(timeout: 5))
+
+        // Daily reminder: switch on, allow notifications, confirm iOS has it scheduled
+        let reminder = app.switches["Daily reminder"]
+        reveal(reminder)
+        reminder.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        let allow = XCUIApplication(bundleIdentifier: "com.apple.springboard").buttons["Allow"]
+        if allow.waitForExistence(timeout: 8) { allow.tap() }
+        let scheduled = app.staticTexts["Scheduled daily at 7:00"]
+        var tries = 0
+        while !scheduled.exists && tries < 4 { app.swipeUp(); tries += 1 }
+        XCTAssertTrue(scheduled.waitForExistence(timeout: 8), "iOS should hold a pending daily reminder")
+
         app.buttons["Save"].tap()
         app.tabBars.buttons["Plan"].tap()
         // The Plan tab was left on its For Time segment; switch back to the weeks.
