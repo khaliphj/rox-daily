@@ -10,6 +10,14 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+      - name: Installer handles a Mac with no iPhone attached
+        run: |
+          ROX_NO_OPEN=1 "./Install on iPhone.command" > installer.log 2>&1 || true
+          cat installer.log
+          grep -q "1/4 Looking for your iPhone" installer.log
+          grep -q "No iPhone found" installer.log
+          xcrun devicectl list devices --json-output devices.json >/dev/null 2>&1 || true
+          python3 -c "import json; d=json.load(open('devices.json')); print(sorted(d['result'].keys())); assert isinstance(d['result']['devices'], list)"
       - name: Pick a simulator
         run: |
           DEV=$(xcrun simctl list devices available | grep -E "iPhone 1[5-7]( Pro)? \(" | head -1 | grep -oE "[0-9A-F-]{36}")

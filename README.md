@@ -6,20 +6,18 @@ A personal iPhone app that shows one HYROX workout per day, from today to race d
 
 Needs a Mac with Xcode 16 or newer and an iPhone on iOS 17 or newer.
 
-### Easiest: Xcode over USB
+### Easiest: double-click
 
-1. Unzip, then double-click `RoxDaily.xcodeproj`.
-2. In Xcode: click the blue **RoxDaily** project icon, then the **RoxDaily** target, then **Signing & Capabilities**, and pick your Apple ID under **Team**.
-3. Plug in your iPhone, choose it in the device menu at the top, and press **Run** (the play button).
-4. First time only, on the phone: **Settings > General > VPN & Device Management**, trust your developer certificate. If asked, also turn on **Developer Mode** under **Settings > Privacy & Security**.
+1. Plug your iPhone into the Mac with a cable, unlock it, and tap **Trust**.
+2. Double-click **Install on iPhone.command** in this folder.
 
-### One command (after Xcode has signed it once)
+It finds your iPhone and Apple ID team, builds the app, installs it and opens it. If anything is missing it opens Xcode and tells you what to do. The first time, macOS may ask you to confirm opening the file (right-click it and choose **Open**), and the phone may ask you to trust your developer certificate under **Settings > General > VPN & Device Management**.
 
-```bash
-./install.sh
-```
+### Or in Xcode
 
-Builds and installs to the iPhone plugged in over USB. If it cannot find your signing team it opens Xcode instead.
+1. Double-click `RoxDaily.xcodeproj`.
+2. Click the blue **RoxDaily** project icon, then the **RoxDaily** target, then **Signing & Capabilities**, and pick your Apple ID under **Team**.
+3. Choose your iPhone in the device menu at the top and press **Run**.
 
 With a free Apple ID the app must be re-installed every 7 days. A paid developer account extends that to a year.
 
