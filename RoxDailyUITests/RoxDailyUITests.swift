@@ -83,10 +83,14 @@ final class RoxDailyUITests: XCTestCase {
         app.tabBars.buttons["Today"].tap()
         app.buttons["Settings"].tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
-        app.steppers.firstMatch.buttons["Decrement"].tap()
+        let fewer = app.steppers.firstMatch.buttons["Decrement"]
+        reveal(fewer)
+        fewer.tap()
+        XCTAssertTrue(app.staticTexts["Training days per week: 4"].waitForExistence(timeout: 5))
         app.buttons["Save"].tap()
         app.tabBars.buttons["Plan"].tap()
-        app.buttons["Plan"].firstMatch.tap()
+        // The Plan tab was left on its For Time segment; switch back to the weeks.
+        app.scrollViews.buttons["Plan"].firstMatch.tap()
         XCTAssertTrue(app.staticTexts["1/4"].waitForExistence(timeout: 5), "Plan should rebuild to four sessions a week")
 
         // Persistence across relaunch
